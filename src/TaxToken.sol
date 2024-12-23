@@ -21,16 +21,18 @@ contract TaxToken is ERC20 {
         require(balanceSender >= amount, "Insufficient balance to transer!");
 
         // Get the tax amount(10% of the amount to be transfered)
-        uint taxAmount = amount / taxDivisor; // The tax amount doesn't go anywhere, it stays in the contract.
+        uint taxAmount = amount / taxDivisor;
         // AMount to be transferred
         uint transferAmount = amount - taxAmount;
 
-        // Subract the transfer amount from the sender's balance
-        _balances[msg.sender] -= amount;
-        // Add the amoun tto the balance of the recipient
-        _balances[to] += amount;
+        _transfer(msg.sender, to, transferAmount);
+        _transfer(msg.sender, "0x00000dEaD", taxAmount);
 
-        emit Transfer(from, to, amount);
+        // // Subract the transfer amount from the sender's balance
+        // _balances[msg.sender] -= amount;
+        // // Add the amoun tto the balance of the recipient
+        // _balances[to] += amount;
+
         return true;
     }
 }
